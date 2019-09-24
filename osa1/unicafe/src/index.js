@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import ReactDOM from 'react-dom';
 
+/// Render statistics
 const Statistics = (props) => {
     if (props.total < 1) {
         return (
@@ -10,19 +11,30 @@ const Statistics = (props) => {
         )
     }
         return ( 
-            <div>
                 <div>
-                    <p>Good: { props.good }</p>
-                    <p>Neutral: { props.neutral }</p>
-                    <p>Bad: { props.bad }</p>
-                    <p>Total: { props.total }</p>
-                    <p>Average: { props.average/props.total }</p>
-                    <p>Positive: { (props.good/props.total)*100 } %</p>
+                    <Statistic value={ props.good } text='Good' />
+                    <Statistic value={ props.neutral } text='Neutral' />
+                    <Statistic value={ props.bad } text='Bad'/>
+                    <Statistic value={ props.total } text='total' />
+                    <Statistic value={ props.average/props.total } text='Average' />
+                    <Statistic value={ (props.good/props.total)*100 } text='Positive' />
                 </div>
-            </div>
         )
 }
 
+/// Render single row of statistic
+const Statistic = ({ value, text }) => {
+    if (text === 'Positive') {
+        return (
+            <p>{text}: {value} % </p>
+        )
+    }
+        return (
+            <p>{text}: {value} </p>
+        )
+}
+
+/// Render single button
 const Button = ({ onClick, text}) => (
     <button onClick={onClick}>
         {text}
