@@ -25,18 +25,24 @@ const Button = ({ onClick, text }) => (
 
 const App = (props) => {
     const [selected, setSelected] = useState(-1)
+    const [votes, setVotes] = 
+        useState(Array(props.anecdotes.length).fill(0))
     
     const handleRandom = () => {
-        setSelected(Math.floor(Math.random() * props.anecdotes.length))
+        setSelected(
+            Math.floor(Math.random() * props.anecdotes.length)
+            )
     }
     const handleVote = () => {
-        
+        const copyVotes = [...votes]
+        copyVotes[selected] += 1
+        setVotes(copyVotes)
     }
 
     return (
         <div>
             <Display anecdote={props.anecdotes} 
-                selected={selected} votes={props.votes} />
+                selected={selected} votes={votes} />
             <div>
                 <Button onClick={ handleVote } text="Vote" />
                 <Button onClick={ handleRandom } text="Next anecdote" />
@@ -63,8 +69,8 @@ const anecdotes = [
     'It’s not a bug – it’s an undocumented feature.',
     'One man’s crappy software is another man’s full-time job.'
 ]
-const votes = Array(anecdotes.length).fill(0)
+//const votes = Array(anecdotes.length).fill(0)
 
 ReactDOM.render(
-    <App anecdotes={anecdotes} votes={votes} />
+    <App anecdotes={anecdotes} />
     , document.getElementById('root'));
