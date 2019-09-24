@@ -11,14 +11,14 @@ const Statistics = (props) => {
         )
     }
         return ( 
-                <div>
+                <table>
                     <Statistic value={ props.good } text='Good' />
                     <Statistic value={ props.neutral } text='Neutral' />
                     <Statistic value={ props.bad } text='Bad'/>
                     <Statistic value={ props.total } text='total' />
                     <Statistic value={ props.average/props.total } text='Average' />
                     <Statistic value={ (props.good/props.total)*100 } text='Positive' />
-                </div>
+                </table>
         )
 }
 
@@ -26,11 +26,21 @@ const Statistics = (props) => {
 const Statistic = ({ value, text }) => {
     if (text === 'Positive') {
         return (
-            <p>{text}: {value} % </p>
+            <tbody>
+                <tr>
+                    <td>{text}</td>
+                    <td>{value} %</td>
+                </tr>
+            </tbody>
         )
     }
         return (
-            <p>{text}: {value} </p>
+            <tbody>
+                <tr>
+                    <td>{text}</td>
+                    <td>{value}</td>
+                </tr>
+            </tbody>
         )
 }
 
