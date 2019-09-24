@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import ReactDOM from 'react-dom';
 
+//Render anecdote
 const Display = ({ anecdote, selected, votes }) => {
     if(selected < 0) {
         return (
@@ -17,16 +18,60 @@ const Display = ({ anecdote, selected, votes }) => {
     )
 }
 
-const Button = ({ onClick, text }) => (
-    <button onClick={onClick}>
-        {text}
-    </button>
-)
+//Render most voted anecdote
+const DisplayMostVoted = ({ anecdote, mostVoted }) => {
+    if(mostVoted <= 0) {
+        return (
+            <div>
+                <h2>Anecdote with most votes</h2>
+                No votes yet
+            </div>
+        )
+    }
+    return (
+        <div>
+            <h2>Anecdote with most votes</h2>
+            {anecdote[mostVoted]}
+        </div>
+    )
+}
+
+//Render vote button
+const VoteButton = ({ onClick, text, selected }) => {
+    if(selected < 0) {
+        return (
+            ''
+        )
+    }
+    return (
+        <button onClick={ onClick }>
+            {text}
+        </button>
+    )
+
+}
+
+//Render next button
+const NextButton = ({ onClick, text, selected}) => {
+    if(selected < 0) {
+        return (
+            <button onClick={ onClick }>
+                Show anecdote
+            </button>
+        )
+    }
+    return (
+        <button onClick={ onClick }>
+            {text}
+        </button>
+    )
+}
 
 const App = (props) => {
     const [selected, setSelected] = useState(-1)
     const [votes, setVotes] = 
         useState(Array(props.anecdotes.length).fill(0))
+    const mostVoted = votes.indexOf(Math.max(...votes))
     
     const handleRandom = () => {
         setSelected(
@@ -41,16 +86,23 @@ const App = (props) => {
 
     return (
         <div>
-            <Display anecdote={props.anecdotes} 
-                selected={selected} votes={votes} />
+            <h1>Anecdote for a day</h1>
+            <Display anecdote={ props.anecdotes } 
+                selected={ selected } votes={ votes } />
             <div>
-                <Button onClick={ handleVote } text="Vote" />
-                <Button onClick={ handleRandom } text="Next anecdote" />
+                <VoteButton onClick={ handleVote } 
+                    text="Vote" selected={ selected }/>
+                <NextButton onClick={ handleRandom } 
+                    text="Next anecdote" selected={ selected } />
             </div>
+            <DisplayMostVoted anecdote={ props.anecdotes }
+                mostVoted={ mostVoted } />
         </div>
     )
+    
 }
 
+//Array of anecdotes
 const anecdotes = [
     'If it hurts, do it more often',
     'Adding manpower to a late software project makes it later!',
@@ -69,7 +121,6 @@ const anecdotes = [
     'It’s not a bug – it’s an undocumented feature.',
     'One man’s crappy software is another man’s full-time job.'
 ]
-//const votes = Array(anecdotes.length).fill(0)
 
 ReactDOM.render(
     <App anecdotes={anecdotes} />
