@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 
-const contacts = [
+/*const contacts = [
     {
         id: 1,
         name: 'Santeri Kinnunen',
@@ -20,6 +20,8 @@ const contacts = [
         number: 242424
     }
 ]
+*/
 
-
-ReactDOM.render(<App contacts={ contacts } />, document.getElementById('root'));
+ReactDOM.render(
+    <App />
+    , document.getElementById('root'));

@@ -1,16 +1,25 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios'
 import NewContact from './components/NewContact'
 import FilterContact from './components/FilterContact'
 import SearchContacts from './components/SearchContacts'
 
 /* Phonebook application that let's the user 
   save and view added contacts */
-const App = ({ contacts }) => {
-  const [persons, setPersons] = useState(contacts)
+const App = () => {
+  const [persons, setPersons] = useState([])
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [newFilter, setNewFilter] = useState('')
   
+  useEffect(() => {
+    axios
+      .get("http://localhost:3001/contacts")
+      .then(response => {
+        setPersons(response.data)
+      })
+  }, [])
+
   return (
     <div>
       <h1>Phonebook</h1>
