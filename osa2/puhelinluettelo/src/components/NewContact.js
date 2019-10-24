@@ -1,4 +1,5 @@
-import React from 'react';
+import React from 'react'
+import contactService from './../services/contacts'
 
 /* Render a new contact
   Checks if a value is provided, it already exists 
@@ -9,24 +10,30 @@ const NewContact = ( { persons, setPersons
     const addContact = (event) => {
         event.preventDefault()
         const contactObj = {
-          id: persons.length +1,
           name: newName,
           number: newNumber
         }
         if (newName.length < 1 || newNumber.length < 1) {
           window.alert(`Name or number is missing`)
-        } else if (checkContact(newName)) {
-          window.alert(`${ newName } is already added. 
-          Try the search function`)
+        } else if (checkContact(newName) 
+                    && window.confirm(
+                    `${newName} already exists. Want to update the number?`)) {
+          const id = persons.find(p => p.name === newName).id            
+          updateContact(id, contactObj)
         } else if (!newNumber.match(/[0-9/+/-]/ig)) {
           window.alert(`Please provide a number`)
         } else {
-          setPersons(persons.concat(contactObj))
-          setNewName('')
-          setNewNumber('')
+          contactService
+            .create(contactObj)
+            .then(data => {
+              setPersons(persons.concat(data))
+              setNewName('')
+              setNewNumber('')
+            })
         }
       }
     
+      /* Check if the contact exists */
       const checkContact = ( value ) => {
         const ind = persons.findIndex(x => 
           x.name.toLowerCase() === value.toLowerCase())
@@ -34,7 +41,21 @@ const NewContact = ( { persons, setPersons
           return true
         } return false
       } 
-        
+      
+      /* Update contact */
+      const updateContact = (id, contactObj) => {
+        contactService
+        .update(id, contactObj)
+        .then(newContact => {
+          setPersons(persons.map(contact => 
+            contact.id !== id 
+            ? contact 
+            : newContact))
+          setNewName('')
+          setNewNumber('')
+        })
+      }
+
       const handleContactChange = (event) => {
         console.log(event.target.value)
         setNewName(event.target.value)

@@ -2,7 +2,7 @@ import React from 'react'
 import Contact from './Contact'
 
 /* Render the added contacts to screen */
-const FilterContact = ( { persons, newFilter } ) => {
+const FilterContact = ( { persons, newFilter, toggleDelete } ) => {
 
     const contactsToShow = () =>  
       persons.filter(person => {
@@ -20,7 +20,8 @@ const FilterContact = ( { persons, newFilter } ) => {
           key={ contact.id }
           id={ contact.id }
           name={ contact.name }
-          number={ contact.number } />
+          number={ contact.number }
+          toggleDelete={ () => toggleDelete(contact.id) } />
       )
     }
 

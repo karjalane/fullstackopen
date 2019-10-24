@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios'
 import NewContact from './components/NewContact'
 import FilterContact from './components/FilterContact'
 import SearchContacts from './components/SearchContacts'
+import contactService from './services/contacts'
 
 /* Phonebook application that let's the user 
   save and view added contacts */
@@ -13,12 +13,23 @@ const App = () => {
   const [newFilter, setNewFilter] = useState('')
   
   useEffect(() => {
-    axios
-      .get("http://localhost:3001/contacts")
-      .then(response => {
-        setPersons(response.data)
+    contactService
+      .getAll()
+      .then(initContact => {
+        setPersons(initContact)
       })
   }, [])
+
+  const deleteHandler = (id) => {
+    const contact = persons.find(c => c.id === id)
+    if (window.confirm(`Delete ${contact.name}?`)) {
+      contactService
+      .deleteContact(id)
+      .then(response => {
+        setPersons(persons.filter(p => p.id !== id))
+      })
+    }
+  }
 
   return (
     <div>
@@ -37,7 +48,8 @@ const App = () => {
       <h2>Numbers</h2>
       <FilterContact 
         persons={ persons }
-        newFilter={newFilter}/>
+        newFilter={newFilter}
+        toggleDelete={ deleteHandler }/>
     </div>
   )
 }
