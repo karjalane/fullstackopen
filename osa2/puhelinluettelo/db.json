@@ -19,6 +19,11 @@
       "name": "Michael Caine",
       "number": "09-95995999",
       "id": 5
+    },
+    {
+      "name": "Jussi Mäyrä",
+      "number": "8888888",
+      "id": 6
     }
   ]
 }

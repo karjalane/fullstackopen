@@ -6,7 +6,8 @@ import contactService from './../services/contacts'
   and if the number is numeral*/
 const NewContact = ( { persons, setPersons
                     ,newName, setNewName
-                    ,newNumber, setNewNumber } ) => {
+                    ,newNumber, setNewNumber
+                    ,notification, setNotification } ) => {
     const addContact = (event) => {
         event.preventDefault()
         const contactObj = {
@@ -23,13 +24,7 @@ const NewContact = ( { persons, setPersons
         } else if (!newNumber.match(/[0-9/+/-]/ig)) {
           window.alert(`Please provide a number`)
         } else {
-          contactService
-            .create(contactObj)
-            .then(data => {
-              setPersons(persons.concat(data))
-              setNewName('')
-              setNewNumber('')
-            })
+          newContact(contactObj)
         }
       }
     
@@ -42,17 +37,57 @@ const NewContact = ( { persons, setPersons
         } return false
       } 
       
+      /* Add new contact to server */
+      const newContact = (contactObj) => {
+        contactService
+            .create(contactObj)
+            .then(data => {
+              setNotification(
+                { message: `${contactObj.name} added`, isError: false}
+              )
+              setTimeout(() => {
+                setNotification({ ...notification, message: null })
+              }, 3000)
+              setPersons(persons.concat(data))
+              setNewName('')
+              setNewNumber('')
+            })
+            .catch(() => {
+              setNotification(
+                { message: `${contactObj.name} already deleted`, isError: true }
+              )
+              setTimeout(() => {
+                setNotification({ message: null, isError: false })
+              }, 3000)
+            })
+      }
+
       /* Update contact */
       const updateContact = (id, contactObj) => {
         contactService
         .update(id, contactObj)
         .then(newContact => {
+          setNotification(
+            { message: `${contactObj.name} updated`, isError: false }
+          )
+          setTimeout(() => {
+            setNotification({ ...notification, message: null})
+          }, 3000)
           setPersons(persons.map(contact => 
             contact.id !== id 
             ? contact 
             : newContact))
           setNewName('')
           setNewNumber('')
+        })
+        .catch(() => {
+          setNotification(
+            { message: `${contactObj.name} already deleted`, isError: true }
+            )
+            setTimeout(() => {
+              setNotification({ message: null, isError: false })
+            }, 3000)
+            setPersons(persons.filter(p => p.id !== id))
         })
       }
 
