@@ -1,8 +1,23 @@
 const express = require('express')
 const app = express()
 const bodyParser = require('body-parser')
+const morgan = require('morgan')
 
 app.use(bodyParser.json())
+app.use(morgan('tiny'))
+
+
+/*
+const requestLogger = (req, res, next) => {
+    console.log('Method:', req.method)
+    console.log('Path:  ', req.path)
+    console.log('Body:  ', req.body)
+    console.log('---------')
+    next()
+}
+ 
+app.use(requestLogger)
+*/
 
 let contacts = [
     {
@@ -65,7 +80,7 @@ const generateID = () => {
 }
 
 const checkContact = ( value ) => {
-    const ind = persons.findIndex(x => 
+    const ind = contacts.findIndex(x => 
         x.name.toLowerCase() === value.toLowerCase())
     if (ind >= 0) {
         return true
@@ -85,7 +100,7 @@ app.post('/api/persons', (req, res) => {
             error: 'Number missing'
         })
     }
-    if (checkContact) {
+    if (checkContact(body.name)) {
         return res.status(400).json({
             error: 'Name needs to be unique'
         })
@@ -101,6 +116,14 @@ app.post('/api/persons', (req, res) => {
 
     res.json(contact)
 })
+
+/*
+const unknownEndpoint = (req, res) => {
+    res.status(404).send({ error: 'unknown endpoint' })
+}
+
+app.use(unknownEndpoint)
+*/
 
 const PORT = 3001
 app.listen(PORT, () => {
