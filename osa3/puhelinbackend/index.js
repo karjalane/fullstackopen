@@ -4,21 +4,22 @@ const bodyParser = require('body-parser')
 const morgan = require('morgan')
 
 app.use(bodyParser.json())
-app.use(morgan('tiny'))
 
+// Morgan spec
+morgan.token('body', (req, res) => {
+    if (req.method === 'POST') { 
+        return JSON.stringify(req.body)
+    } else {
+        return ''
+    }
+})
 
-/*
-const requestLogger = (req, res, next) => {
-    console.log('Method:', req.method)
-    console.log('Path:  ', req.path)
-    console.log('Body:  ', req.body)
-    console.log('---------')
-    next()
-}
- 
-app.use(requestLogger)
-*/
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'))
 
+// app.use(morgan('tiny'))
+// app.use(morgan(':body'))
+
+// Data
 let contacts = [
     {
         id: 1,
@@ -37,14 +38,17 @@ let contacts = [
     }
 ]
 
-app.get('/', (reg, res) => {
+// Get base url
+app.get('/', (req, res) => {
     res.send('<h1>poop</h1>')
 })
 
+// Get all contacts
 app.get('/api/persons', (req, res) => {
     res.json(contacts)
 })
 
+// Get single contact
 app.get('/api/persons/:id', (req, res) => {
     const id = Number(req.params.id)
     const contact = contacts.find(c => c.id === id)
@@ -55,6 +59,7 @@ app.get('/api/persons/:id', (req, res) => {
     }
 })
 
+// Get info
 app.get('/info', (req, res) => {
     const amount = contacts.length
     const date = new Date()
@@ -65,6 +70,7 @@ app.get('/info', (req, res) => {
         <div>${date}</div>`)
 })
 
+// Delete single contact
 app.delete('/api/persons/:id', (req, res) => {
     const id = Number(req.params.id)
     contacts = contacts.filter(c => c.id !== id)
@@ -72,13 +78,28 @@ app.delete('/api/persons/:id', (req, res) => {
     res.status(204).end()
 })
 
-const generateID = () => {
-    const newID = contacts.length > 0 
-        ? Math.floor(Math.random() * 9999)
-        : 0
-    return newID
+const checkID = ( ID ) => {
+    const ind = contacts.findIndex(x =>
+        x.id === ID)
+    if (ind >= 0) {
+        return true
+    } return false
 }
 
+// Generate unique ID
+const generateID = () => {
+    const newID = contacts.length > 0 
+        ? Math.floor(Math.random() * 5)
+        : 0
+    if (contacts.length > 4) {
+        return -1
+        }
+    if (checkID(newID)) {
+        return generateID()
+    } else { return newID }
+}
+
+// Check if name exists in database
 const checkContact = ( value ) => {
     const ind = contacts.findIndex(x => 
         x.name.toLowerCase() === value.toLowerCase())
@@ -87,8 +108,10 @@ const checkContact = ( value ) => {
     } return false
 }
 
+// Add new contact
 app.post('/api/persons', (req, res) => {
     const body = req.body
+    const id = generateID()
 
     if (!body.name) {
         return res.status(400).json({
@@ -100,6 +123,11 @@ app.post('/api/persons', (req, res) => {
             error: 'Number missing'
         })
     }
+    if (id < 0) {
+        return res.status(400).json({
+            error: 'Database full'
+        })
+    }
     if (checkContact(body.name)) {
         return res.status(400).json({
             error: 'Name needs to be unique'
@@ -109,21 +137,13 @@ app.post('/api/persons', (req, res) => {
     const contact = {
         name: body.name,
         number: body.number,
-        id: generateID()
+        id: id
     }
 
     contacts = contacts.concat(contact)
 
     res.json(contact)
 })
-
-/*
-const unknownEndpoint = (req, res) => {
-    res.status(404).send({ error: 'unknown endpoint' })
-}
-
-app.use(unknownEndpoint)
-*/
 
 const PORT = 3001
 app.listen(PORT, () => {
