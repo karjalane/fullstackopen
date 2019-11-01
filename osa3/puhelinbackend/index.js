@@ -6,6 +6,7 @@ const cors = require('cors')
 
 app.use(bodyParser.json())
 app.use(cors())
+app.use(express.static('build'))
 
 // Morgan spec
 morgan.token('body', (req, res) => {
@@ -24,19 +25,19 @@ app.use(morgan(':method :url :status :res[content-length] - :response-time ms :b
 // Data
 let contacts = [
     {
-        id: 1,
         name: 'Santeri Kinnunen',
-        number: 123123
+        number: '123123',
+        id: 1
     },
     {
-        id: 2,
         name: 'Timo Jutila', 
-        number: 555555
+        number: '555555',
+        id: 2
     },
     {
-        id: 3,
         name: 'Sami Kapanen',
-        number: 242424
+        number: '242424',
+        id: 3
     }
 ]
 
@@ -91,9 +92,9 @@ const checkID = ( ID ) => {
 // Generate unique ID
 const generateID = () => {
     const newID = contacts.length > 0 
-        ? Math.floor(Math.random() * 5)
+        ? Math.floor(Math.random() * 9999)
         : 0
-    if (contacts.length > 4) {
+    if (contacts.length > 9998) {
         return -1
         }
     if (checkID(newID)) {
