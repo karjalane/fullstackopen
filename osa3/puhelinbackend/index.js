@@ -1,8 +1,10 @@
+require('dotenv').config()
 const express = require('express')
 const app = express()
 const bodyParser = require('body-parser')
 const morgan = require('morgan')
 const cors = require('cors')
+const Contact = require('./models/contact')
 
 app.use(bodyParser.json())
 app.use(cors())
@@ -22,6 +24,7 @@ app.use(morgan(':method :url :status :res[content-length] - :response-time ms :b
 // app.use(morgan('tiny'))
 // app.use(morgan(':body'))
 
+/*
 // Data
 let contacts = [
     {
@@ -40,6 +43,7 @@ let contacts = [
         id: 3
     }
 ]
+*/
 
 // Get base url
 app.get('/', (req, res) => {
@@ -48,18 +52,16 @@ app.get('/', (req, res) => {
 
 // Get all contacts
 app.get('/api/persons', (req, res) => {
-    res.json(contacts)
+    Contact.find( {} ).then(contacts => {
+        res.json(contacts.map(contact => contact.toJSON()))
+    })
 })
 
 // Get single contact
 app.get('/api/persons/:id', (req, res) => {
-    const id = Number(req.params.id)
-    const contact = contacts.find(c => c.id === id)
-    if (contact) {
-        res.json(contact) 
-    } else {
-        res.status(404).end()
-    }
+    Contact.findById(req.params.id).then(contact => {
+        res.json(contact.toJSON())
+    })
 })
 
 // Get info
@@ -114,7 +116,7 @@ const checkContact = ( value ) => {
 // Add new contact
 app.post('/api/persons', (req, res) => {
     const body = req.body
-    const id = generateID()
+    //const id = generateID()
 
     if (!body.name) {
         return res.status(400).json({
@@ -126,7 +128,7 @@ app.post('/api/persons', (req, res) => {
             error: 'Number missing'
         })
     }
-    if (id < 0) {
+    /*if (id < 0) {
         return res.status(400).json({
             error: 'Database full'
         })
@@ -135,20 +137,19 @@ app.post('/api/persons', (req, res) => {
         return res.status(400).json({
             error: 'Name needs to be unique'
         })
-    }
+    }*/
 
-    const contact = {
+    const contact =  new Contact({
         name: body.name,
         number: body.number,
-        id: id
-    }
+    })
 
-    contacts = contacts.concat(contact)
-
-    res.json(contact)
+    contact.save().then(savedContact => {
+        res.json(savedContact.toJSON())
+    })
 })
 
-const PORT = process.env.PORT || 3001
+const PORT = process.env.PORT
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`)
 })
