@@ -11,112 +11,114 @@ const NewContact = ( { persons, setPersons
     const addContact = (event) => {
         event.preventDefault()
         const contactObj = {
-          name: newName,
-          number: newNumber
+            name: newName,
+            number: newNumber
         }
         if (newName.length < 1 || newNumber.length < 1) {
-          window.alert(`Name or number is missing`)
+            window.alert(`Name or number is missing`)
         } else if (checkContact(newName) 
                     && window.confirm(
                     `${newName} already exists. Want to update the number?`)) {
-          const id = persons.find(p => p.name === newName).id            
-          updateContact(id, contactObj)
+            const id = persons.find(p => p.name === newName).id            
+            updateContact(id, contactObj)
         } else if (!newNumber.match(/[0-9/+/-]/ig)) {
-          window.alert(`Please provide a number`)
+            window.alert(`Please provide a number`)
         } else {
-          newContact(contactObj)
+            newContact(contactObj)
         }
-      }
+    }
     
       /* Check if the contact exists */
-      const checkContact = ( value ) => {
+    const checkContact = ( value ) => {
         const ind = persons.findIndex(x => 
-          x.name.toLowerCase() === value.toLowerCase())
+            x.name.toLowerCase() === value.toLowerCase())
         if (ind >= 0) {
-          return true
+            return true
         } return false
-      } 
-      
-      /* Add new contact to server */
-      const newContact = (contactObj) => {
+    }
+
+    /* Add new contact to server */
+    const newContact = (contactObj) => {
         contactService
             .create(contactObj)
             .then(data => {
-              setNotification(
-                { message: `${contactObj.name} added`, isError: false}
-              )
-              setTimeout(() => {
-                setNotification({ ...notification, message: null })
-              }, 3000)
-              setPersons(persons.concat(data))
-              setNewName('')
-              setNewNumber('')
+                setNotification(
+                    { message: `${contactObj.name} added`, isError: false}
+                )
+                setTimeout(() => {
+                    setNotification({ ...notification, message: null })
+                }, 3000)
+                setPersons(persons.concat(data))
+                setNewName('')
+                setNewNumber('')
             })
-            .catch(() => {
-              setNotification(
-                { message: `${contactObj.name} already deleted`, isError: true }
-              )
-              setTimeout(() => {
-                setNotification({ message: null, isError: false })
-              }, 3000)
+            .catch((error) => {
+                console.log(error.response)
+                setNotification(
+                    { message: error.response.data.error, isError: true }
+                )
+                setTimeout(() => {
+                    setNotification({ message: null, isError: false })
+                }, 3000)
             })
-      }
+    }
 
-      /* Update contact */
-      const updateContact = (id, contactObj) => {
+    /* Update contact */
+    const updateContact = (id, contactObj) => {
         contactService
         .update(id, contactObj)
         .then(newContact => {
-          setNotification(
-            { message: `${contactObj.name} updated`, isError: false }
-          )
-          setTimeout(() => {
-            setNotification({ ...notification, message: null})
-          }, 3000)
-          setPersons(persons.map(contact => 
-            contact.id !== id 
-            ? contact 
-            : newContact))
-          setNewName('')
-          setNewNumber('')
-        })
-        .catch(() => {
-          setNotification(
-            { message: `${contactObj.name} already deleted`, isError: true }
+            setNotification(
+                { message: `${contactObj.name} updated`, isError: false }
             )
             setTimeout(() => {
-              setNotification({ message: null, isError: false })
+                setNotification({ ...notification, message: null})
+            }, 3000)
+            setPersons(persons.map(contact => 
+                contact.id !== id 
+                ? contact 
+                : newContact))
+            setNewName('')
+            setNewNumber('')
+            })
+        .catch(() => {
+            setNotification(
+                { message: `${contactObj.name} already deleted`, isError: true }
+            )
+            setTimeout(() => {
+                setNotification({ message: null, isError: false })
             }, 3000)
             setPersons(persons.filter(p => p.id !== id))
         })
-      }
+    }
 
-      const handleContactChange = (event) => {
+    const handleContactChange = (event) => {
         console.log(event.target.value)
         setNewName(event.target.value)
-      }
-      const handleNumberChange = (event) => {
+    }
+    const handleNumberChange = (event) => {
         setNewNumber(event.target.value)
-      }
-    
+    }
+
     return (
     <form onSubmit={ addContact }>
         <div>
-          Name: 
+        Name: 
             <input 
-              value={ newName }
-              onChange={ handleContactChange } />
+                value={ newName }
+                onChange={ handleContactChange } />
         </div>
         <div>
-          Number: 
+        Number: 
             <input 
-              value={ newNumber }
-              onChange={ handleNumberChange } />
+                value={ newNumber }
+                onChange={ handleNumberChange } />
         </div>
         <div>
-          <button type="submit">Add</button>
+            <button type="submit">Add</button>
         </div>
-      </form>
-    )}
+    </form>
+    )
+}
 
 export default NewContact

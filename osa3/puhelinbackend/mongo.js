@@ -12,7 +12,7 @@ if ( process.argv.length > 5 ) {
 
 const password = process.argv[2]
 
-const url = 
+const url =
     `mongodb+srv://noteuser:${ password }@fsonotes-wsako.mongodb.net/phonebook?retryWrites=true&w=majority`
 
 mongoose.connect(url, { useUnifiedTopology: true, useNewUrlParser: true })
@@ -45,9 +45,9 @@ if ( process.argv.length > 3 ) {
         number: process.argv[4],
     })
 
-    contact.save().then(response => {
-        console.log('Contact saved');
-        mongoose.connection.close();
-        console.log('Database disconnected');
+    contact.save().then(() => {
+        console.log('Contact saved')
+        mongoose.connection.close()
+        console.log('Database disconnected')
     })
 }

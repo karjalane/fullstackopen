@@ -3,7 +3,7 @@ import React from 'react'
 /* Render the list of contact */
 const Contact = ({ id, name, number, toggleDelete }) => 
     <div className='contact'>
-        { id }: { name } 
+        { name } 
         { ' ' }
         <b>{ number }</b>
         { ' ' }

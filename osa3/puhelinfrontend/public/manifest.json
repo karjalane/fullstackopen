@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "Phonebook App",
+  "name": "Create your own phonebook",
   "icons": [
     {
       "src": "favicon.ico",

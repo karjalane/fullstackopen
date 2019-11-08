@@ -13,7 +13,7 @@ app.use(cors())
 
 // Morgan spec
 morgan.token('body', (req, res) => {
-    if (req.method === 'POST') { 
+    if (req.method === 'POST') {
         return JSON.stringify(req.body)
     } else {
         return ''
@@ -34,7 +34,7 @@ let contacts = [
         id: 1
     },
     {
-        name: 'Timo Jutila', 
+        name: 'Timo Jutila',
         number: '555555',
         id: 2
     },
@@ -63,7 +63,7 @@ app.get('/', (req, res) => {
 
 // Generate unique ID
 const generateID = () => {
-    const newID = contacts.length > 0 
+    const newID = contacts.length > 0
         ? Math.floor(Math.random() * 9999)
         : 0
     if (contacts.length > 9998) {
@@ -76,7 +76,7 @@ const generateID = () => {
 
 // Check if name exists in database
 const checkContact = ( value ) => {
-    const ind = contacts.findIndex(x => 
+    const ind = contacts.findIndex(x =>
         x.name.toLowerCase() === value.toLowerCase())
     if (ind >= 0) {
         return true
@@ -84,11 +84,11 @@ const checkContact = ( value ) => {
 }*/
 
 // Add new contact
-app.post('/api/persons', (req, res) => {
+app.post('/api/persons', (req, res, next) => {
     const body = req.body
-    //const id = generateID()
+    /*const id = generateID()
 
-    /*if (!body.name) {
+    if (!body.name) {
         return res.status(400).json({
             error: 'Name missing'
         })
@@ -114,9 +114,13 @@ app.post('/api/persons', (req, res) => {
         number: body.number,
     })
 
-    contact.save().then(savedContact => {
-        res.json(savedContact.toJSON())
-    })
+    contact
+        .save()
+        .then(savedContact => savedContact.toJSON())
+        .then(savedFormattedContact => {
+            res.json(savedFormattedContact)
+        })
+        .catch(error => next(error))
 })
 
 // Get all contacts
@@ -157,7 +161,7 @@ app.put('/api/persons/:id', (req, res, next) => {
 // Delete single contact
 app.delete('/api/persons/:id', (req, res, next) => {
     Contact.findByIdAndRemove(req.params.id)
-        .then(result => {
+        .then(() => {
             res.status(204).end()
         })
         .catch(error => next(error))
@@ -166,7 +170,7 @@ app.delete('/api/persons/:id', (req, res, next) => {
 // Get info
 app.get('/info', (req, res) => {
     const date = new Date()
-    
+
     Contact.countDocuments().then((a) => {
         res.status(200).send(
             `<div>Phonebook has info for ${a} people</div>
@@ -184,10 +188,11 @@ app.use(unknownEndpoint)
 const errorHandler = (error, request, response, next) => {
     console.error(error.message)
 
-    if (error.name === 'CastError' && error.kind == 'ObjectId') {
+    if (error.name === 'CastError' && error.kind === 'ObjectId') {
         return response.status(400).send({ error: 'Malformatted ID' })
+    } else if (error.name === 'ValidationError') {
+        return response.status(400).json({ error: error.message })
     }
-
     next(error)
 }
 
