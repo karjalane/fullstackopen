@@ -112,13 +112,58 @@ describe('favorite blog', () => {
 
         expect(result).toEqual(
             {
-                _id: '5a422b3a1b54a676234d17f9',
                 title: 'Canonical string reduction',
                 author: 'Edsger W. Dijkstra',
-                url: 'http://www.cs.utexas.edu/~EWD/transcriptions/EWD08xx/EWD808.html',
                 likes: 12,
-                __v: 0
             }
         )
+    })
+})
+
+describe('most blogs', () => {
+    test('when zero blogs, then zero blogs', () => {
+        const result = listHelper.mostBlogs(listWithNoBlogs)
+
+        expect(result).toEqual({})
+    })
+    test('when one blog, thats the most blogs', () => {
+        const result = listHelper.mostBlogs(listWithOneBlog)
+
+        expect(result).toEqual({
+            author: 'Michael Chan',
+            blogs: 1
+        })
+    })
+    test('when many blogs, then find most productive author', () => {
+        const result = listHelper.mostBlogs(listWithManyBlogs)
+
+        expect(result).toEqual({
+            author: 'Robert C. Martin',
+            blogs: 3
+        })
+    })
+})
+
+describe('most likes', () => {
+    test('when zero blogs, zero likes', () => {
+        const result = listHelper.mostLikes(listWithNoBlogs)
+
+        expect(result).toEqual({})
+    })
+    test('when one blog, that the likes', () => {
+        const result = listHelper.mostLikes(listWithOneBlog)
+
+        expect(result).toEqual({
+            author: 'Michael Chan',
+            likes: 7
+        })
+    })
+    test('when many blogs, find one with most likes', () => {
+        const result = listHelper.mostLikes(listWithManyBlogs)
+
+        expect(result).toEqual({
+            author: 'Edsger W. Dijkstra',
+            likes: 17
+        })
     })
 })
