@@ -29,6 +29,24 @@ h1 {
   line-height: 0.5;
 }
 
+.bloglist {
+  border-bottom: 0.1rem solid grey;
+  padding-bottom: 15px;
+  cursor: pointer;
+}
+
+.bloglist:hover {
+  border-bottom: 0.1rem solid grey;
+  padding-bottom: 15px;
+  cursor: pointer;
+  font-size: 105%;
+}
+
+.addedby {
+  font-size: 70%;
+  font-weight: 300;
+}
+
 .overlay {
   position: absolute;
   left: 50%;

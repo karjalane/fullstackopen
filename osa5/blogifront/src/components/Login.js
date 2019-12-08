@@ -5,7 +5,10 @@ import blogService from '../services/blogs'
 const Login = ({ username, setUsername
                 ,password, setPassword
                 ,user, setUser
-                ,notification, setNotification }) => {
+                ,notification, setNotification
+                ,loginVisible, setLoginVisible
+                ,hideWhenVisible, showWhenVisible
+            }) => {
 
     const handleLogin = async (event) => {
         event.preventDefault()
@@ -33,28 +36,38 @@ const Login = ({ username, setUsername
     }
 
     return (
-        <form onSubmit={ handleLogin }>
+        <div>
             <h2 className="loginheader">Login</h2>
-            <div>
-                Username:
-                    <input
-                    type="text"
-                    value={ username }
-                    name="username"
-                    onChange={({ target }) => setUsername(target.value) }
-                    />
+            <div style={ hideWhenVisible }>
+                <button onClick={() => setLoginVisible(true)}>Log in</button>
             </div>
-            <div>
-                Password:
-                <input
-                type="password"
-                value={ password }
-                name="password"
-                onChange={({ target }) => setPassword(target.value) }
-                />
-            </div>
-            <button type="submit">Log in</button>
-        </form>
+            
+                <div style={ showWhenVisible }>
+                <form onSubmit={ handleLogin }>
+                    <div>
+                        Username:
+                            <input
+                            type="text"
+                            value={ username }
+                            name="username"
+                            onChange={({ target }) => setUsername(target.value) }
+                            />
+                    </div>
+                    <div>
+                        Password:
+                        <input
+                        type="password"
+                        value={ password }
+                        name="password"
+                        onChange={({ target }) => setPassword(target.value) }
+                        />
+                    </div>
+                    <button onClick={() => setLoginVisible(false)} type="submit">Log in</button>
+                </form>
+                <button onClick={() => setLoginVisible(false)}>Cancel</button>
+                </div>
+            
+        </div>
     )
 }
 

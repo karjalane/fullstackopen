@@ -6,10 +6,12 @@ const AddBlog = ({ blogs, setBlogs
                 ,newAuthor, setNewAuthor
                 ,newURL, setNewURL
                 ,newLikes, setNewLikes
-                ,notification, setNotification }) => {
+                ,notification, setNotification
+                ,noteFormRef }) => {
 
     const addBlog = (event) => {
         event.preventDefault()
+        noteFormRef.current.toggleVisibility()
         const blogObj = {
             title: newTitle,
             author: newAuthor,

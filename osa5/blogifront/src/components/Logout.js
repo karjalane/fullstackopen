@@ -17,6 +17,7 @@ const Logout = ({ setUser, setNotification, notification }) => {
     return (
         <div>
             <button onClick={ () => handleLogout() }>Log out</button>
+            <br/>
         </div>
     )
 }

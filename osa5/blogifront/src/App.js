@@ -5,6 +5,7 @@ import AddBlog from './components/AddBlog'
 import Notification from './components/Notification'
 import Login from './components/Login'
 import Logout from './components/Logout'
+import Togglable from './components/Togglable'
 
 function App() {
     const [blogs, setBlogs] = useState([])
@@ -15,10 +16,16 @@ function App() {
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
     const [user, setUser] = useState(null)
+    const [loginVisible, setLoginVisible] = useState(false)
     const [notification, setNotification] = useState({
         message: null,
         isError: false
     })
+
+    const hideWhenVisible = { display: loginVisible ? 'none' : ''}
+    const showWhenVisible = { display: loginVisible ? '' : 'none'}
+
+    const noteFormRef = React.createRef()
 
     useEffect(() => {
         blogService
@@ -52,6 +59,10 @@ function App() {
                         setUser={ setUser }
                         notification={ notification }
                         setNotification={ setNotification }
+                        loginVisible={ loginVisible }
+                        setLoginVisible={ setLoginVisible }
+                        hideWhenVisible={ hideWhenVisible }
+                        showWhenVisible={ showWhenVisible }
                     />
                 : <div>
                     <p>Logged in as { user.name }</p>
@@ -60,20 +71,24 @@ function App() {
                         notification={ notification }
                         setNotification={ setNotification }
                     />
-                    <AddBlog
-                        blogs={ blogs }
-                        setBlogs={ setBlogs }
-                        newTitle={ newTitle }
-                        setNewTitle={ setNewTitle }
-                        newAuthor={ newAuthor }
-                        setNewAuthor={ setNewAuthor }
-                        newURL={ newURL }
-                        setNewURL={ setNewURL }
-                        newLikes={ newLikes }
-                        setNewLikes={ setNewLikes }
-                        notification={ notification }
-                        setNotification={ setNotification }
-                    />                
+                    <br />
+                    <Togglable buttonLabel='Add blog' ref={ noteFormRef }>
+                        <AddBlog
+                            blogs={ blogs }
+                            setBlogs={ setBlogs }
+                            newTitle={ newTitle }
+                            setNewTitle={ setNewTitle }
+                            newAuthor={ newAuthor }
+                            setNewAuthor={ setNewAuthor }
+                            newURL={ newURL }
+                            setNewURL={ setNewURL }
+                            newLikes={ newLikes }
+                            setNewLikes={ setNewLikes }
+                            notification={ notification }
+                            setNotification={ setNotification }
+                            noteFormRef={ noteFormRef }
+                        />
+                    </Togglable>
                     <ShowBlogs
                         blogs={ blogs }
                     />
