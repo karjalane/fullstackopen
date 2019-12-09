@@ -3,7 +3,7 @@ import Blog from './Blog'
 
 const ShowBlogs = ({ blogs, setBlogs, user
     , notification, setNotification }) => {
-    
+
     const rows = () => {
         if (blogs.length < 1) {
             return <div>No blogs to show</div>
@@ -22,7 +22,7 @@ const ShowBlogs = ({ blogs, setBlogs, user
     }
 
     return (
-    <ul className="showlist"> { rows() } </ul>
+        <ul className="showlist"> { rows() } </ul>
     )
 }
 

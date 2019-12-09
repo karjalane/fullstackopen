@@ -22,8 +22,8 @@ function App() {
         isError: false
     })
 
-    const hideWhenVisible = { display: loginVisible ? 'none' : ''}
-    const showWhenVisible = { display: loginVisible ? '' : 'none'}
+    const hideWhenVisible = { display: loginVisible ? 'none' : '' }
+    const showWhenVisible = { display: loginVisible ? '' : 'none' }
 
     const noteFormRef = React.createRef()
 
@@ -48,22 +48,19 @@ function App() {
         <div>
             <h1>Blogz</h1>
             <div className="overlay"><Notification message={ notification }/></div>
-            
+
             { user === null
                 ?    <Login
-                        username={ username }
-                        setUsername={ setUsername }
-                        password={ password }
-                        setPassword={ setPassword }
-                        user={ user }
-                        setUser={ setUser }
-                        notification={ notification }
-                        setNotification={ setNotification }
-                        loginVisible={ loginVisible }
-                        setLoginVisible={ setLoginVisible }
-                        hideWhenVisible={ hideWhenVisible }
-                        showWhenVisible={ showWhenVisible }
-                    />
+                    username={ username }
+                    setUsername={ setUsername }
+                    password={ password }
+                    setPassword={ setPassword }
+                    setUser={ setUser }
+                    setNotification={ setNotification }
+                    setLoginVisible={ setLoginVisible }
+                    hideWhenVisible={ hideWhenVisible }
+                    showWhenVisible={ showWhenVisible }
+                />
                 : <div>
                     <p>Logged in as { user.name }</p>
                     <Logout
@@ -97,7 +94,7 @@ function App() {
                         setNotification={ setNotification }
                     />
                 </div>
-                }
+            }
         </div>
     )
 }

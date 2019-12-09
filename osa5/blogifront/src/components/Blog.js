@@ -1,14 +1,15 @@
 import React, { useState } from 'react'
 import blogService from '../services/blogs'
+import PropTypes from 'prop-types'
 
 const Blog = ({ blog
     , blogs, setBlogs
     , notification, setNotification
     , removeAllowed }) => {
-    
+
     const [detailsVisible, setDetailsVisible] = useState(false)
     const [addLike, setAddLike] = useState(blog.likes)
-    const showWhenVisible = { display: detailsVisible ? '' : 'none'}
+    const showWhenVisible = { display: detailsVisible ? '' : 'none' }
 
     const handleLike = (event) => {
         event.preventDefault()
@@ -38,20 +39,19 @@ const Blog = ({ blog
 
     const handleRemove = (event) => {
         event.preventDefault()
-        if (window.confirm
-            (`Delete ${blog.title} by ${blog.author} permanently?`)) {
+        if (window.confirm(`Delete ${blog.title} by ${blog.author} permanently?`)) {
             blogService
                 .remove(blog.id)
-                .then((data) => {
+                .then(() => {
                     setNotification(
                         { message: `${ blog.title } by ${ blog.author } deleted`, isError: false }
                     )
                     setTimeout(() => {
                         setNotification({ ...notification, message: null })
                     }, 3000)
-                setBlogs(blogs
-                    .filter(x => x.id !== blog.id)
-                    .sort((x,y) => y.likes - x.likes))
+                    setBlogs(blogs
+                        .filter(x => x.id !== blog.id)
+                        .sort((x,y) => y.likes - x.likes))
                 })
         }
     }
@@ -59,21 +59,25 @@ const Blog = ({ blog
     return (
         <div className='bloglist'>
             <div onClick={ () => setDetailsVisible(!detailsVisible) }>
-            <p><b>{ blog.title }</b></p> 
-            <p>Author: { blog.author }</p>
+                <p><b>{ blog.title }</b></p>
+                <p>Author: { blog.author }</p>
             </div>
             <div style={ showWhenVisible }>
                 <p>URL: { blog.url }</p>
                 <p>Likes: { blog.likes }</p>
-                <button className='likebutton' 
+                <button className='likebutton'
                     onClick={ handleLike }>Like</button>
                 {removeAllowed && <button onClick={ handleRemove }>Remove</button>}
-                {removeAllowed 
-                ? <p className='addedby'>Added by: you </p>
-                : <p className='addedby'>Added by: { blog.user.username } </p>}
+                {removeAllowed
+                    ? <p className='addedby'>Added by: you </p>
+                    : <p className='addedby'>Added by: { blog.user.username } </p>}
             </div>
         </div>
     )
+}
+
+Blog.propTypes = {
+    removeAllowed: PropTypes.bool.isRequired
 }
 
 export default Blog

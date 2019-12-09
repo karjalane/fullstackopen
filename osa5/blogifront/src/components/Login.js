@@ -1,14 +1,14 @@
 import React from 'react'
 import loginService from '../services/login'
 import blogService from '../services/blogs'
+import PropTypes from 'prop-types'
 
 const Login = ({ username, setUsername
-                ,password, setPassword
-                ,user, setUser
-                ,notification, setNotification
-                ,loginVisible, setLoginVisible
-                ,hideWhenVisible, showWhenVisible
-            }) => {
+    ,password, setPassword
+    ,setUser
+    ,setNotification
+    ,setLoginVisible
+    ,hideWhenVisible, showWhenVisible }) => {
 
     const handleLogin = async (event) => {
         event.preventDefault()
@@ -30,7 +30,7 @@ const Login = ({ username, setUsername
                 { message: exp.response.data.error, isError: true }
             )
             setTimeout(() => {
-                setNotification({ message: null, isError: false})
+                setNotification({ message: null, isError: false })
             }, 3000)
         }
     }
@@ -41,34 +41,37 @@ const Login = ({ username, setUsername
             <div style={ hideWhenVisible }>
                 <button onClick={() => setLoginVisible(true)}>Log in</button>
             </div>
-            
-                <div style={ showWhenVisible }>
+            <div style={ showWhenVisible }>
                 <form onSubmit={ handleLogin }>
                     <div>
                         Username:
-                            <input
+                        <input
                             type="text"
                             value={ username }
                             name="username"
                             onChange={({ target }) => setUsername(target.value) }
-                            />
+                        />
                     </div>
                     <div>
                         Password:
                         <input
-                        type="password"
-                        value={ password }
-                        name="password"
-                        onChange={({ target }) => setPassword(target.value) }
+                            type="password"
+                            value={ password }
+                            name="password"
+                            onChange={({ target }) => setPassword(target.value) }
                         />
                     </div>
                     <button onClick={() => setLoginVisible(false)} type="submit">Log in</button>
                 </form>
                 <button onClick={() => setLoginVisible(false)}>Cancel</button>
-                </div>
-            
+            </div>
         </div>
     )
+}
+
+Login.propTypes = {
+    username: PropTypes.string.isRequired,
+    password: PropTypes.string.isRequired
 }
 
 export default Login

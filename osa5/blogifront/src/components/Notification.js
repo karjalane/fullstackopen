@@ -1,7 +1,7 @@
-import React from 'react';
+import React from 'react'
 
 const Notification = ({ message }) => {
-    return message.message === null 
+    return message.message === null
         ? null
         : message.isError === true
             ? <div className="error">

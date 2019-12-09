@@ -2,12 +2,12 @@ import React from 'react'
 import blogService from '../services/blogs'
 
 const AddBlog = ({ blogs, setBlogs
-                ,newTitle, setNewTitle
-                ,newAuthor, setNewAuthor
-                ,newURL, setNewURL
-                ,newLikes, setNewLikes
-                ,notification, setNotification
-                ,noteFormRef }) => {
+    ,newTitle, setNewTitle
+    ,newAuthor, setNewAuthor
+    ,newURL, setNewURL
+    ,setNewLikes
+    ,notification, setNotification
+    ,noteFormRef }) => {
 
     const addBlog = (event) => {
         event.preventDefault()
@@ -39,11 +39,11 @@ const AddBlog = ({ blogs, setBlogs
                     { message: err.response.data.error, isError: true }
                 )
                 setTimeout(() => {
-                    setNotification({ message: null, isError: false})
+                    setNotification({ message: null, isError: false })
                 }, 3000)
             })
     }
-    
+
     const handleTitleChange = (event) => {
         setNewTitle(event.target.value)
     }
@@ -62,21 +62,21 @@ const AddBlog = ({ blogs, setBlogs
             <form onSubmit={ addBlog }>
                 <div>
                     Title:
-                        <input
-                            value={ newTitle }
-                            onChange={ handleTitleChange } />
+                    <input
+                        value={ newTitle }
+                        onChange={ handleTitleChange } />
                 </div>
                 <div>
                     Author:
-                        <input
-                            value={ newAuthor }
-                            onChange={ handleAuthorChange } />
+                    <input
+                        value={ newAuthor }
+                        onChange={ handleAuthorChange } />
                 </div>
                 <div>
                     URL:
-                        <input
-                            value={ newURL }
-                            onChange={ handleURLChange } />
+                    <input
+                        value={ newURL }
+                        onChange={ handleURLChange } />
                 </div>
                 <div>
                     <button type="submit">Add</button>
