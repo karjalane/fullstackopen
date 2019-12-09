@@ -31,7 +31,7 @@ function App() {
         blogService
             .getAll()
             .then(initBlog => {
-                setBlogs(initBlog)
+                setBlogs(initBlog.sort((x,y) => y.likes - x.likes))
             })
     }, [])
 
@@ -91,6 +91,10 @@ function App() {
                     </Togglable>
                     <ShowBlogs
                         blogs={ blogs }
+                        setBlogs={ setBlogs }
+                        user={ user }
+                        notification={ notification }
+                        setNotification={ setNotification }
                     />
                 </div>
                 }

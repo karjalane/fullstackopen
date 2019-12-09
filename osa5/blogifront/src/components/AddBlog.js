@@ -26,7 +26,9 @@ const AddBlog = ({ blogs, setBlogs
                 setTimeout(() => {
                     setNotification({ ...notification, message: null })
                 }, 3000)
-                setBlogs(blogs.concat(data))
+                setBlogs(blogs
+                    .concat(data)
+                    .sort((x,y) => y.likes - x.likes))
                 setNewTitle('')
                 setNewAuthor('')
                 setNewURL('')
