@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import blogService from '../services/blogs'
-import PropTypes from 'prop-types'
+//import PropTypes from 'prop-types'
 
 const Blog = ({ blog
     , blogs, setBlogs
@@ -62,13 +62,13 @@ const Blog = ({ blog
                 <p><b>{ blog.title }</b></p>
                 <p>Author: { blog.author }</p>
             </div>
-            <div style={ showWhenVisible }>
+            <div style={ showWhenVisible } className='reveal'>
                 <p>URL: { blog.url }</p>
                 <p>Likes: { blog.likes }</p>
                 <button className='likebutton'
                     onClick={ handleLike }>Like</button>
-                {removeAllowed && <button onClick={ handleRemove }>Remove</button>}
-                {removeAllowed
+                { removeAllowed && <button onClick={ handleRemove }>Remove</button> }
+                { removeAllowed
                     ? <p className='addedby'>Added by: you </p>
                     : <p className='addedby'>Added by: { blog.user.username } </p>}
             </div>
@@ -76,8 +76,8 @@ const Blog = ({ blog
     )
 }
 
-Blog.propTypes = {
+/*Blog.propTypes = {
     removeAllowed: PropTypes.bool.isRequired
-}
+}*/
 
 export default Blog
