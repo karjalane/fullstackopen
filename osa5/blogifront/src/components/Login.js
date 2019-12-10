@@ -3,8 +3,8 @@ import loginService from '../services/login'
 import blogService from '../services/blogs'
 import PropTypes from 'prop-types'
 
-const Login = ({ username, setUsername
-    ,password, setPassword
+const Login = ({ username
+    ,password
     ,setUser
     ,setNotification
     ,setLoginVisible
@@ -14,7 +14,7 @@ const Login = ({ username, setUsername
         event.preventDefault()
         try {
             const user = await loginService.login({
-                username, password
+                username: username.value, password: password.value
             })
 
             window.localStorage.setItem(
@@ -23,9 +23,10 @@ const Login = ({ username, setUsername
 
             blogService.setToken(user.token)
             setUser(user)
-            setUsername('')
-            setPassword('')
+            username.reset()
+            password.reset()
         } catch (exp) {
+            password.reset()
             setNotification(
                 { message: exp.response.data.error, isError: true }
             )
@@ -46,22 +47,18 @@ const Login = ({ username, setUsername
                     <div>
                         Username:
                         <input
-                            type="text"
-                            value={ username }
-                            name="username"
-                            onChange={({ target }) => setUsername(target.value) }
+                            { ...username}
+                            reset={ null }
                         />
                     </div>
                     <div>
                         Password:
                         <input
-                            type="password"
-                            value={ password }
-                            name="password"
-                            onChange={({ target }) => setPassword(target.value) }
+                            { ...password }
+                            reset={ null }
                         />
                     </div>
-                    <button onClick={() => setLoginVisible(false)} type="submit">Log in</button>
+                    <button onClick={() => setLoginVisible(true)} type="submit">Log in</button>
                 </form>
                 <button onClick={() => setLoginVisible(false)}>Cancel</button>
             </div>
@@ -70,8 +67,8 @@ const Login = ({ username, setUsername
 }
 
 Login.propTypes = {
-    username: PropTypes.string.isRequired,
-    password: PropTypes.string.isRequired
+    username: PropTypes.object.isRequired,
+    password: PropTypes.object.isRequired
 }
 
 export default Login

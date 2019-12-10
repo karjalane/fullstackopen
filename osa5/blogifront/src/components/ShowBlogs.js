@@ -1,6 +1,7 @@
 import React from 'react'
 import Blog from './Blog'
 
+// Render blogs to UI
 const ShowBlogs = ({ blogs, setBlogs, user
     , notification, setNotification }) => {
 

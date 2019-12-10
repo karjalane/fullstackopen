@@ -1,11 +1,13 @@
 import React from 'react'
 import blogService from '../services/blogs'
 
-const Logout = ({ setUser, setNotification, notification }) => {
+const Logout = ({ setUser, setLoginVisible
+    , setNotification, notification }) => {
     const handleLogout = () => {
         window.localStorage.clear()
         setUser(null)
         blogService.setToken(null)
+        setLoginVisible(false)
         setNotification(
             { message: 'Logged out', isError: false }
         )

@@ -6,15 +6,13 @@ import Notification from './components/Notification'
 import Login from './components/Login'
 import Logout from './components/Logout'
 import Togglable from './components/Togglable'
+import { useField } from './hooks'
 
 function App() {
     const [blogs, setBlogs] = useState([])
-    const [newTitle, setNewTitle] = useState('')
-    const [newAuthor, setNewAuthor] = useState('')
-    const [newURL, setNewURL] = useState('')
-    const [newLikes, setNewLikes] = useState('')
-    const [username, setUsername] = useState('')
-    const [password, setPassword] = useState('')
+    //const [newTitle, setNewTitle] = useState('')
+    //const [newAuthor, setNewAuthor] = useState('')
+    //const [newURL, setNewURL] = useState('')
     const [user, setUser] = useState(null)
     const [loginVisible, setLoginVisible] = useState(false)
     const [notification, setNotification] = useState({
@@ -24,6 +22,12 @@ function App() {
 
     const hideWhenVisible = { display: loginVisible ? 'none' : '' }
     const showWhenVisible = { display: loginVisible ? '' : 'none' }
+
+    const username = useField('text')
+    const password = useField('password')
+    const newTitle = useField('text')
+    const newAuthor = useField('text')
+    const newURL = useField('url')
 
     const noteFormRef = React.createRef()
 
@@ -52,9 +56,7 @@ function App() {
             { user === null
                 ?    <Login
                     username={ username }
-                    setUsername={ setUsername }
                     password={ password }
-                    setPassword={ setPassword }
                     setUser={ setUser }
                     setNotification={ setNotification }
                     setLoginVisible={ setLoginVisible }
@@ -65,6 +67,7 @@ function App() {
                     <p>Logged in as { user.name }</p>
                     <Logout
                         setUser={ setUser }
+                        setLoginVisible={ setLoginVisible }
                         notification={ notification }
                         setNotification={ setNotification }
                     />
@@ -74,13 +77,11 @@ function App() {
                             blogs={ blogs }
                             setBlogs={ setBlogs }
                             newTitle={ newTitle }
-                            setNewTitle={ setNewTitle }
+                            //setNewTitle={ setNewTitle }
                             newAuthor={ newAuthor }
-                            setNewAuthor={ setNewAuthor }
+                            //setNewAuthor={ setNewAuthor }
                             newURL={ newURL }
-                            setNewURL={ setNewURL }
-                            newLikes={ newLikes }
-                            setNewLikes={ setNewLikes }
+                            //setNewURL={ setNewURL }
                             notification={ notification }
                             setNotification={ setNotification }
                             noteFormRef={ noteFormRef }

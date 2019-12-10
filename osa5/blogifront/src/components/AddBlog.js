@@ -2,10 +2,9 @@ import React from 'react'
 import blogService from '../services/blogs'
 
 const AddBlog = ({ blogs, setBlogs
-    ,newTitle, setNewTitle
-    ,newAuthor, setNewAuthor
-    ,newURL, setNewURL
-    ,setNewLikes
+    ,newTitle
+    ,newAuthor
+    ,newURL
     ,notification, setNotification
     ,noteFormRef }) => {
 
@@ -13,9 +12,9 @@ const AddBlog = ({ blogs, setBlogs
         event.preventDefault()
         noteFormRef.current.toggleVisibility()
         const blogObj = {
-            title: newTitle,
-            author: newAuthor,
-            url: newURL,
+            title: newTitle.value,
+            author: newAuthor.value,
+            url: newURL.value,
         }
         blogService
             .create(blogObj)
@@ -29,10 +28,9 @@ const AddBlog = ({ blogs, setBlogs
                 setBlogs(blogs
                     .concat(data)
                     .sort((x,y) => y.likes - x.likes))
-                setNewTitle('')
-                setNewAuthor('')
-                setNewURL('')
-                setNewLikes('')
+                newTitle.reset()
+                newAuthor.reset()
+                newURL.reset()
             })
             .catch((err) => {
                 setNotification(
@@ -44,7 +42,7 @@ const AddBlog = ({ blogs, setBlogs
             })
     }
 
-    const handleTitleChange = (event) => {
+    /*const handleTitleChange = (event) => {
         setNewTitle(event.target.value)
     }
 
@@ -54,7 +52,7 @@ const AddBlog = ({ blogs, setBlogs
 
     const handleURLChange = (event) => {
         setNewURL(event.target.value)
-    }
+    }*/
 
     return (
         <div>
@@ -63,20 +61,20 @@ const AddBlog = ({ blogs, setBlogs
                 <div>
                     Title:
                     <input
-                        value={ newTitle }
-                        onChange={ handleTitleChange } />
+                        { ...newTitle }
+                        reset={ null } />
                 </div>
                 <div>
                     Author:
                     <input
-                        value={ newAuthor }
-                        onChange={ handleAuthorChange } />
+                        { ...newAuthor }
+                        reset={ null } />
                 </div>
                 <div>
                     URL:
                     <input
-                        value={ newURL }
-                        onChange={ handleURLChange } />
+                        { ...newURL }
+                        reset={ null } />
                 </div>
                 <div>
                     <button type="submit">Add</button>

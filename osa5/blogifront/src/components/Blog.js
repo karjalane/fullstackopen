@@ -11,10 +11,15 @@ const Blog = ({ blog
     const [addLike, setAddLike] = useState(blog.likes)
     const showWhenVisible = { display: detailsVisible ? '' : 'none' }
 
+    // Handle push on like button
+    // bug in renderin after like button
     const handleLike = (event) => {
         event.preventDefault()
         const updtObj = {
-            user: blog.user.id,
+            user: {
+                id: blog.user.id,
+                name: blog.user.name,
+                username: blog.user.username },
             likes: addLike + 1,
             author: blog.author,
             title: blog.title,
