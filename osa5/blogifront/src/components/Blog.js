@@ -58,7 +58,9 @@ const Blog = ({ blog
 
     return (
         <div className='bloglist'>
-            <div onClick={ () => setDetailsVisible(!detailsVisible) }>
+            <div
+                onClick={ () => setDetailsVisible(!detailsVisible) }
+                className='singleblog'>
                 <p><b>{ blog.title }</b></p>
                 <p>Author: { blog.author }</p>
             </div>
