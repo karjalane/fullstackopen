@@ -10,9 +10,6 @@ import { useField } from './hooks'
 
 function App() {
     const [blogs, setBlogs] = useState([])
-    //const [newTitle, setNewTitle] = useState('')
-    //const [newAuthor, setNewAuthor] = useState('')
-    //const [newURL, setNewURL] = useState('')
     const [user, setUser] = useState(null)
     const [loginVisible, setLoginVisible] = useState(false)
     const [notification, setNotification] = useState({
@@ -77,11 +74,8 @@ function App() {
                             blogs={ blogs }
                             setBlogs={ setBlogs }
                             newTitle={ newTitle }
-                            //setNewTitle={ setNewTitle }
                             newAuthor={ newAuthor }
-                            //setNewAuthor={ setNewAuthor }
                             newURL={ newURL }
-                            //setNewURL={ setNewURL }
                             notification={ notification }
                             setNotification={ setNotification }
                             noteFormRef={ noteFormRef }

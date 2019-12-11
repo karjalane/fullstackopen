@@ -12,7 +12,6 @@ const Blog = ({ blog
     const showWhenVisible = { display: detailsVisible ? '' : 'none' }
 
     // Handle push on like button
-    // bug in renderin after like button
     const handleLike = (event) => {
         event.preventDefault()
         const updtObj = {
@@ -35,9 +34,10 @@ const Blog = ({ blog
                     setNotification({ ...notification, message: null })
                 }, 2000)
                 setAddLike(updtObj.likes)
+                blog.likes = data.likes
                 setBlogs(blogs
                     .filter(x => x.id !== blog.id)
-                    .concat(data)
+                    .concat(blog)
                     .sort((x,y) => y.likes - x.likes))
             })
     }
