@@ -1,12 +1,29 @@
 import React from 'react'
 import Anecdote from './Anecdote'
 import { voteAnecdote } from '../reducers/anecdoteReducer'
+import { voteNotification, resetNotification } from '../reducers/notificationReducer'
 
-const Anecdotes = ({ store }) => {
+const AnecdoteList = ({ store }) => {
+
+    const handleVote = (anecdote) => {
+        store.dispatch(voteAnecdote(anecdote.id))
+        store.dispatch(voteNotification(anecdote.content))
+        setTimeout(() => {
+            store.dispatch(resetNotification())
+        }, 5000)
+    }
+
+    const anecdotesToShow = (anecdotes) => {
+        return store.getState().filter
+            ? anecdotes.filter(a => 
+                a.content.toLowerCase()
+                .includes(store.getState().filter.toLowerCase()))
+            : anecdotes
+    }
+
     return (
         <div>
-            <h2>Anecdotes</h2>
-            {store.getState()
+            { anecdotesToShow(store.getState().anecdotes)
                 .sort((a,b) => b.votes - a.votes)
                 .map(anecdote =>
                 <div key ={ anecdote.id }>
@@ -14,7 +31,7 @@ const Anecdotes = ({ store }) => {
                     <Anecdote
                         anecdote={ anecdote }
                         handleClick={() =>
-                            store.dispatch(voteAnecdote(anecdote.id))
+                            handleVote(anecdote)
                         }
                     />
                 </div>
@@ -23,4 +40,4 @@ const Anecdotes = ({ store }) => {
     )
 }
 
-export default Anecdotes
+export default AnecdoteList
