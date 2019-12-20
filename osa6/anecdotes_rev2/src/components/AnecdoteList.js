@@ -7,7 +7,7 @@ import { voteNotification, resetNotification } from '../reducers/notificationRed
 const AnecdoteList = (props) => {
 
     const handleVote = (anecdote) => {
-        props.voteAnecdote(anecdote.id)
+        props.voteAnecdote(anecdote)
         props.voteNotification(anecdote.content)
         setTimeout(() => {
             props.resetNotification()
