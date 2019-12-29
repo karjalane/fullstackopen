@@ -3,7 +3,6 @@ import {
   BrowserRouter as Router
   , Route
   , Link
-  , Redirect
   , withRouter
 } from 'react-router-dom'
 
@@ -34,19 +33,20 @@ const AnecdoteList = ({ anecdotes }) => (
     <ul>
       {anecdotes.map(anecdote => 
         <li key={anecdote.id}>
-          <Link to={`/${ anecdote.id }`}>{anecdote.content}</Link>
+          <Link to={`/all/${ anecdote.id }`}>{anecdote.content}</Link> ({ anecdote.votes })
         </li>)}
     </ul>
   </div>
 )
 
-const Anecdote = ({ anecdote }) => (
+const Anecdote = ({ anecdote, vote }) => (
   <div>
     <h3>{ anecdote.content } by { anecdote.author }</h3>
     <p>Has { anecdote.votes } votes</p>
     <p>
       For more info see: <a href={ anecdote.info }>{ anecdote.info }</a>
     </p>
+    <button onClick={ vote }>Vote</button>
   </div>
 )
 
@@ -86,30 +86,32 @@ const CreateNew = (props) => {
       info,
       votes: 0
     })
+    props.history.push('/')
   }
 
   return (
     <div>
-      <h2>create a new anecdote</h2>
+      <h2>Create a new anecdote</h2>
       <form onSubmit={handleSubmit}>
         <div>
-          content
+          Content
           <input name='content' value={content} onChange={(e) => setContent(e.target.value)} />
         </div>
         <div>
-          author
+          Author
           <input name='author' value={author} onChange={(e) => setAuthor(e.target.value)} />
         </div>
         <div>
-          url for more info
+          URL for more info
           <input name='info' value={info} onChange={(e) => setInfo(e.target.value)} />
         </div>
-        <button>create</button>
+        <button>Create</button>
       </form>
     </div>
   )
-
 }
+
+const NewAnecdote = withRouter(CreateNew)
 
 const App = () => {
   const [anecdotes, setAnecdotes] = useState([
@@ -129,11 +131,15 @@ const App = () => {
     }
   ])
 
-  const [notification, setNotification] = useState('')
+  const [notification, setNotification] = useState(null)
 
   const addNew = (anecdote) => {
     anecdote.id = (Math.random() * 10000).toFixed(0)
     setAnecdotes(anecdotes.concat(anecdote))
+    setNotification(`${ anecdote.content } added succesfully`)
+    setTimeout(() => {
+      setNotification(null)
+    }, 10000)
   }
 
   const anecdoteById = (id) =>
@@ -159,14 +165,17 @@ const App = () => {
         <Route exact path='/' render={() =>
           <AnecdoteList anecdotes={ anecdotes }/>
         } />
-        <Route exact path='/:id' render={({ match }) =>
-          <Anecdote anecdote={ anecdoteById(match.params.id) }/>
+        <Route exact path='/all/:id' render={({ match }) =>
+          <Anecdote 
+            anecdote={ anecdoteById(match.params.id) }
+            vote={ () => vote(match.params.id) }
+          />
         } />
         <Route exact path='/about' render={() =>
           <About />
         } />
         <Route exact path='/new' render={() =>
-          <CreateNew addNew={addNew} />
+          <NewAnecdote addNew={ addNew } />
         } />
       </Router>
       <hr></hr>
