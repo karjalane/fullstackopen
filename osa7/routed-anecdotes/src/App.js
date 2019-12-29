@@ -136,7 +136,7 @@ const App = () => {
   const addNew = (anecdote) => {
     anecdote.id = (Math.random() * 10000).toFixed(0)
     setAnecdotes(anecdotes.concat(anecdote))
-    setNotification(`${ anecdote.content } added succesfully`)
+    setNotification(`"${ anecdote.content }" added succesfully`)
     setTimeout(() => {
       setNotification(null)
     }, 10000)
@@ -153,7 +153,9 @@ const App = () => {
       votes: anecdote.votes + 1
     }
 
-    setAnecdotes(anecdotes.map(a => a.id === id ? voted : a))
+    setAnecdotes(anecdotes
+      .sort((a,b) => b.votes - a.votes)
+      .map(a => a.id === id ? voted : a))
   }
 
   return (
