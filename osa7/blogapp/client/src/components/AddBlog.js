@@ -1,87 +1,57 @@
 import React from 'react'
-import blogService from '../services/blogs'
+import { connect } from 'react-redux'
+import { createBlog } from '../reducers/blogReducer'
+import { notification } from '../reducers/notificationReducer'
+//import { useField } from '../hooks'
 
-const AddBlog = ({ blogs, setBlogs
-    ,newTitle
-    ,newAuthor
-    ,newURL
-    ,notification, setNotification
-    ,noteFormRef }) => {
+const AddBlog = (props) => {
+    /*const title = useField('text')
+    const author = useField('text')
+    const url = useField('url')*/
 
-    const addBlog = (event) => {
-        event.preventDefault()
-        noteFormRef.current.toggleVisibility()
-        const blogObj = {
-            title: newTitle.value,
-            author: newAuthor.value,
-            url: newURL.value,
+    const create = async (event) => {
+        try {
+            event.preventDefault()
+            const content = {
+                title: event.target.title.value,
+                author: event.target.author.value,
+                url: event.target.url.value
+            }
+            event.target.title.value = ''
+            event.target.author.value = ''
+            event.target.url.value = ''
+            props.createBlog(content)
+            props.notification(`Added new blog: ${ content.title } by ${ content.author }`, false, 3)
+        } catch(exp) {
+            props.notification(exp.response.data.error, true, 3)
         }
-        blogService
-            .create(blogObj)
-            .then(data => {
-                setNotification(
-                    { message: `${ blogObj.title } by ${ blogObj.author } added`, isError: false }
-                )
-                setTimeout(() => {
-                    setNotification({ ...notification, message: null })
-                }, 3000)
-                setBlogs(blogs
-                    .concat(data)
-                    .sort((x,y) => y.likes - x.likes))
-                newTitle.reset()
-                newAuthor.reset()
-                newURL.reset()
-            })
-            .catch((err) => {
-                setNotification(
-                    { message: err.response.data.error, isError: true }
-                )
-                setTimeout(() => {
-                    setNotification({ message: null, isError: false })
-                }, 3000)
-            })
     }
-
-    /*const handleTitleChange = (event) => {
-        setNewTitle(event.target.value)
-    }
-
-    const handleAuthorChange = (event) => {
-        setNewAuthor(event.target.value)
-    }
-
-    const handleURLChange = (event) => {
-        setNewURL(event.target.value)
-    }*/
 
     return (
         <div>
             <h2 className="addheader">Add new blog</h2>
-            <form onSubmit={ addBlog }>
+            <form onSubmit={ create }>
                 <div>
                     Title:
-                    <input
-                        { ...newTitle }
-                        reset={ null } />
+                    <input name='title'/>
                 </div>
                 <div>
                     Author:
-                    <input
-                        { ...newAuthor }
-                        reset={ null } />
+                    <input name='author'/>
                 </div>
                 <div>
                     URL:
-                    <input
-                        { ...newURL }
-                        reset={ null } />
+                    <input name='url'/>
                 </div>
                 <div>
-                    <button type="submit">Add</button>
+                    <button>Add</button>
                 </div>
             </form>
         </div>
     )
 }
 
-export default AddBlog
+export default connect(null, {
+    createBlog
+    , notification
+})(AddBlog)

@@ -23,7 +23,8 @@ blogsRouter.get('/:id', async (req, res, next) => {
 })
 
 blogsRouter.post('/', async (req, res, next) => {
-    const body = req.body
+    const body = req.body.content
+    console.log(body)
 
     const token = req.token
 
@@ -74,12 +75,11 @@ blogsRouter.delete('/:id', async (req, res, next) => {
 
 blogsRouter.put('/:id', async (req, res, next) => {
     const body = req.body
-
     const blog = {
         title: body.title,
         author: body.author,
         url: body.url,
-        likes: body.likes === undefined ? 0 : body.likes
+        likes: body.likes === undefined ? 0 : body.likes,
     }
     try {
         const updtBlog = await Blog

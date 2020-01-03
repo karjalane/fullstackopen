@@ -30,6 +30,7 @@ h1 {
 }
 
 .bloglist {
+  line-height: 18px;
   border-bottom: 0.1rem solid grey;
   padding-bottom: 15px;
   cursor: pointer;
