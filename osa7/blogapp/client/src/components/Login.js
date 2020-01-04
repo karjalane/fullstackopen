@@ -1,39 +1,47 @@
-import React from 'react'
-import loginService from '../services/login'
+import React, { useState } from 'react'
+import { connect } from 'react-redux'
 import blogService from '../services/blogs'
-import PropTypes from 'prop-types'
+import loginService from '../services/login'
+import Logout from '../components/Logout'
+import { initBlogs } from '../reducers/blogReducer'
+import { notification } from '../reducers/notificationReducer'
+import { login, logout } from '../reducers/userReducer'
 
-const Login = ({ username
-    ,password
-    ,setUser
-    ,setNotification
-    ,setLoginVisible
-    ,hideWhenVisible, showWhenVisible }) => {
+const Login = (props) => {
+    const [loginVisible, setLoginVisible] = useState(false)
+
+    const hideWhenVisible = { display: loginVisible ? 'none' : '' }
+    const showWhenVisible = { display: loginVisible ? '' : 'none' }
 
     const handleLogin = async (event) => {
         event.preventDefault()
+        const username = event.target.username.value
+        const password = event.target.password.value
+
         try {
             const user = await loginService.login({
-                username: username.value, password: password.value
+                username,
+                password
             })
 
             window.localStorage.setItem(
                 'loggedBlogUser', JSON.stringify(user)
             )
-
             blogService.setToken(user.token)
-            setUser(user)
-            username.reset()
-            password.reset()
+            props.initBlogs()
+            props.notification(`Tervetuloa ${ username }`, false, 3)
         } catch (exp) {
-            password.reset()
-            setNotification(
-                { message: exp.response.data.error, isError: true }
-            )
-            setTimeout(() => {
-                setNotification({ message: null, isError: false })
-            }, 3000)
+            props.notification('Väärä käyttäjätunnus tai salasana', true, 3)
         }
+    }
+
+    if (props.user) {
+        return (
+            <div>
+                <p>Logged in as { props.user.name }</p>
+                <Logout />
+            </div>
+        )
     }
 
     return (
@@ -46,17 +54,11 @@ const Login = ({ username
                 <form onSubmit={ handleLogin }>
                     <div>
                         Username:
-                        <input
-                            { ...username}
-                            reset={ null }
-                        />
+                        <input name='username'/>
                     </div>
                     <div>
                         Password:
-                        <input
-                            { ...password }
-                            reset={ null }
-                        />
+                        <input name='password'/>
                     </div>
                     <button onClick={() => setLoginVisible(true)} type="submit">Log in</button>
                 </form>
@@ -66,9 +68,20 @@ const Login = ({ username
     )
 }
 
-Login.propTypes = {
-    username: PropTypes.object.isRequired,
-    password: PropTypes.object.isRequired
+const mapStateToProps = (state) => {
+    return {
+        user: state.user
+    }
 }
 
-export default Login
+const mapDispatchToProps = {
+    initBlogs,
+    login,
+    logout,
+    notification
+}
+
+export default connect(
+    mapStateToProps
+    , mapDispatchToProps
+)(Login)

@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import Blog from './Blog'
-import { voteBlog } from '../reducers/blogReducer'
+import { voteBlog, deleteBlog } from '../reducers/blogReducer'
 import { notification } from '../reducers/notificationReducer'
 
 // Render blogs to UI
@@ -10,6 +10,13 @@ const ShowBlogs = (props) => {
     const handleLike = (blog) => {
         props.voteBlog(blog)
         props.notification(`You liked '${ blog.title }'`, false, 3)
+    }
+
+    const handleRemove = (blog) => {
+        if (window.confirm(`Confirm to delete: ${ blog.title }`)) {
+            props.deleteBlog(blog)
+            props.notification(`'${ blog.title }' deleted`, false, 3)
+        }
     }
 
     return (
@@ -23,6 +30,8 @@ const ShowBlogs = (props) => {
                             blog={ blog }
                             handleClick={() =>
                                 handleLike(blog)}
+                            handleRemove={() =>
+                                handleRemove(blog)}
                         />
                     </div>
                 )
@@ -39,6 +48,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = {
     voteBlog,
+    deleteBlog,
     notification
 }
 

@@ -1,19 +1,18 @@
 import React from 'react'
 import blogService from '../services/blogs'
+import { logout } from '../reducers/userReducer'
+import { notification } from '../reducers/notificationReducer'
+import { connect } from 'react-redux'
 
-const Logout = ({ setUser, setLoginVisible
-    , setNotification, notification }) => {
+const Logout = (props) => {
+
     const handleLogout = () => {
         window.localStorage.clear()
-        setUser(null)
+        props.logout(null)
         blogService.setToken(null)
-        setLoginVisible(false)
-        setNotification(
-            { message: 'Logged out', isError: false }
+        props.notification(
+            'Logged out', false, 3
         )
-        setTimeout(() => {
-            setNotification({ ...notification, message: null })
-        }, 3000)
     }
 
     return (
@@ -24,4 +23,12 @@ const Logout = ({ setUser, setLoginVisible
     )
 }
 
-export default Logout
+const mapDispatchToProps = {
+    logout,
+    notification
+}
+
+export default connect(
+    null
+    , mapDispatchToProps
+)(Logout)

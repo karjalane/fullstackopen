@@ -41,11 +41,12 @@ const update = async (content) => {
     return ret
 }
 
-const remove = async (id) => {
+const remove = async (content) => {
     const config = {
         headers: { Authorization: token }
     }
-    const res = await axios.delete(`${baseUrl}/${id}`, config)
+    const dest = `${ baseUrl }/${ content.id }`
+    const res = await axios.delete(dest, config)
     return res.data
 }
 

@@ -47,7 +47,8 @@ export const initBlogs = () => {
 export const deleteBlog = blog => {
     return async dispatch => {
         const blogToDelete = { ...blog }
-        const blogs = await blogService.remove(blogToDelete)
+        await blogService.remove(blogToDelete)
+        const blogs = await blogService.getAll()
         dispatch({
             type: 'DELETE_BLOG',
             data: blogs
