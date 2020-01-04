@@ -28,10 +28,12 @@ const Login = (props) => {
                 'loggedBlogUser', JSON.stringify(user)
             )
             blogService.setToken(user.token)
+            props.login(user)
             props.initBlogs()
-            props.notification(`Tervetuloa ${ username }`, false, 3)
+            props.notification(`Welcome ${ user.name }`, false, 3)
         } catch (exp) {
-            props.notification('Väärä käyttäjätunnus tai salasana', true, 3)
+            console.log(exp)
+            props.notification('Wrong username or password', true, 3)
         }
     }
 
