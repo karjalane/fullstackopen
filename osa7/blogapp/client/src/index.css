@@ -50,6 +50,7 @@ h1 {
 
 .overlay {
   position: absolute;
+  position: fixed;
   left: 50%;
 }
 

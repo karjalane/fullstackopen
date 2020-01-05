@@ -1,12 +1,18 @@
 import React, { useEffect } from 'react'
 import { connect } from 'react-redux'
+import {
+    BrowserRouter as Router
+    , Route
+} from 'react-router-dom'
 import blogService from './services/blogs'
 import ShowBlogs from './components/ShowBlogs'
 import AddBlog from './components/AddBlog'
 import Notification from './components/Notification'
 import Login from './components/Login'
+import Userbase from './components/Userbase'
 import Togglable from './components/Togglable'
 import { initBlogs } from './reducers/blogReducer'
+import { initUsers } from './reducers/userbaseReducer'
 import { login } from './reducers/userReducer'
 
 const App = (props) => {
@@ -19,25 +25,28 @@ const App = (props) => {
             props.login(user)
             blogService.setToken(user.token)
             props.initBlogs()
+            props.initUsers()
         }
     }, [])
 
     return (
-        <div>
+        <Router>
             <h1>Blogz</h1>
             <div className="overlay"><Notification /></div>
-            <Login />
-            <Togglable buttonLabel='Add blog' ref={ noteFormRef }>
-                <AddBlog />
-            </Togglable>
-            <ShowBlogs />
-        </div>
+            <Route exact path='/' render={() => <Login/> } />
+            <Route exact path='/' render={() => <Togglable buttonLabel='Add blog' ref={ noteFormRef }>
+                <Route exact path='/' render={() => <AddBlog /> } />
+            </Togglable>} />
+            <Route exact path='/' render={() => <ShowBlogs /> } />
+            <Route exact path='/users' render={() => <Userbase /> } />
+        </Router>
     )
 }
 
 const mapDispatchToProps = {
     login,
-    initBlogs
+    initBlogs,
+    initUsers
 }
 
 export default connect(
