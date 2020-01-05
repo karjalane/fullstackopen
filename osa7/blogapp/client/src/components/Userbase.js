@@ -15,7 +15,9 @@ const Userbase = (props) => {
                 { props.userbase.map(u => {
                     return (
                         <Table.Row key={ u.id }>
-                            <Table.Cell><Link to={ `/users/${u.id}` }>{ u.username }</Link></Table.Cell>
+                            <Table.Cell>
+                                <Link to={ `/users/${ u.id }` }>{ u.username }</Link>
+                            </Table.Cell>
                             <Table.Cell>has added { u.blogs.length } blogs</Table.Cell>
                         </Table.Row>
                     )

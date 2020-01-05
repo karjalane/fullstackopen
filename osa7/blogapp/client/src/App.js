@@ -10,10 +10,12 @@ import AddBlog from './components/AddBlog'
 import Notification from './components/Notification'
 import Login from './components/Login'
 import Userbase from './components/Userbase'
+import User from './components/User'
 import Togglable from './components/Togglable'
 import { initBlogs } from './reducers/blogReducer'
 import { initUsers } from './reducers/userbaseReducer'
 import { login } from './reducers/userReducer'
+import Blog from './components/Blog'
 
 const App = (props) => {
     const noteFormRef = React.createRef()
@@ -29,6 +31,14 @@ const App = (props) => {
         }
     }, [])
 
+    const userById = (id) => {
+        return props.userbase.find(u => u.id === id)
+    }
+
+    const blogById = (id) => {
+        return props.blogs.find(b => b.id === id)
+    }
+
     return (
         <Router>
             <h1>Blogz</h1>
@@ -39,8 +49,22 @@ const App = (props) => {
             </Togglable>} />
             <Route exact path='/' render={() => <ShowBlogs /> } />
             <Route exact path='/users' render={() => <Userbase /> } />
+            <Route exact path='/users/:id' render={({ match }) =>
+                <User user={ userById(match.params.id) }/>
+            }/>
+            <Route exact path='/blogs/:id' render={({ match }) =>
+                <Blog blog={ blogById(match.params.id) }/>
+            }/>
         </Router>
     )
+}
+
+const mapStateToProps = (state) => {
+    return {
+        blogs: state.blogs,
+        user: state.user,
+        userbase: state.userbase
+    }
 }
 
 const mapDispatchToProps = {
@@ -50,5 +74,6 @@ const mapDispatchToProps = {
 }
 
 export default connect(
-    null, mapDispatchToProps
+    mapStateToProps
+    , mapDispatchToProps
 )(App)
