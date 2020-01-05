@@ -16,6 +16,7 @@ import { initBlogs } from './reducers/blogReducer'
 import { initUsers } from './reducers/userbaseReducer'
 import { login } from './reducers/userReducer'
 import Blog from './components/Blog'
+import Menubar from './components/Menubar'
 import { Container } from 'semantic-ui-react'
 
 const App = (props) => {
@@ -45,6 +46,7 @@ const App = (props) => {
             <Router>
                 <h1>Blogz</h1>
                 <div className="overlay"><Notification /></div>
+                <Menubar />
                 <Route exact path='/' render={() => <Login/> } />
                 <Route exact path='/' render={() => <Togglable buttonLabel='Add blog' ref={ noteFormRef }>
                     <Route exact path='/' render={() => <AddBlog /> } />

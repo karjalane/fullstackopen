@@ -8,7 +8,7 @@ const Logout = (props) => {
 
     const handleLogout = () => {
         window.localStorage.clear()
-        props.logout(null)
+        props.logout()
         blogService.setToken(null)
         props.notification(
             'Logged out', false, 3

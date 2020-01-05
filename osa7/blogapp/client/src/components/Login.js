@@ -45,7 +45,7 @@ const Login = (props) => {
                     <Segment stacked>
                         <Form.Input
                             fluid
-                            name='username' 
+                            name='username'
                             icon='user'
                             iconPosition='left'
                             placeholder='Username'
