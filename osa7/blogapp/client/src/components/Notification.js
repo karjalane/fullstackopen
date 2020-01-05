@@ -1,16 +1,17 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import { Message } from 'semantic-ui-react'
 
 const Notification = (props) => {
     return props.notification === null
         ? null
         : props.notification.isError === true
-            ? <div className="error">
+            ? <Message warning>
                 { props.notification.message }
-            </div>
-            : <div className="notification">
+            </Message>
+            : <Message className="notification">
                 { props.notification.message }
-            </div>
+            </Message>
 }
 
 const mapStateToProps = (state) => {

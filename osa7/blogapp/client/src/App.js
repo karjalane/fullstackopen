@@ -16,6 +16,7 @@ import { initBlogs } from './reducers/blogReducer'
 import { initUsers } from './reducers/userbaseReducer'
 import { login } from './reducers/userReducer'
 import Blog from './components/Blog'
+import { Container } from 'semantic-ui-react'
 
 const App = (props) => {
     const noteFormRef = React.createRef()
@@ -40,22 +41,24 @@ const App = (props) => {
     }
 
     return (
-        <Router>
-            <h1>Blogz</h1>
-            <div className="overlay"><Notification /></div>
-            <Route exact path='/' render={() => <Login/> } />
-            <Route exact path='/' render={() => <Togglable buttonLabel='Add blog' ref={ noteFormRef }>
-                <Route exact path='/' render={() => <AddBlog /> } />
-            </Togglable>} />
-            <Route exact path='/' render={() => <ShowBlogs /> } />
-            <Route exact path='/users' render={() => <Userbase /> } />
-            <Route exact path='/users/:id' render={({ match }) =>
-                <User user={ userById(match.params.id) }/>
-            }/>
-            <Route exact path='/blogs/:id' render={({ match }) =>
-                <Blog blog={ blogById(match.params.id) }/>
-            }/>
-        </Router>
+        <Container>
+            <Router>
+                <h1>Blogz</h1>
+                <div className="overlay"><Notification /></div>
+                <Route exact path='/' render={() => <Login/> } />
+                <Route exact path='/' render={() => <Togglable buttonLabel='Add blog' ref={ noteFormRef }>
+                    <Route exact path='/' render={() => <AddBlog /> } />
+                </Togglable>} />
+                <Route exact path='/' render={() => <ShowBlogs /> } />
+                <Route exact path='/users' render={() => <Userbase /> } />
+                <Route exact path='/users/:id' render={({ match }) =>
+                    <User user={ userById(match.params.id) }/>
+                }/>
+                <Route exact path='/blogs/:id' render={({ match }) =>
+                    <Blog blog={ blogById(match.params.id) }/>
+                }/>
+            </Router>
+        </Container>
     )
 }
 

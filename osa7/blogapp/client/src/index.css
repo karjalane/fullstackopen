@@ -5,26 +5,26 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: beige;
+  background-color: #b5e9da;
 }
 
 h1 {
-  color: purple;
+  color: #bc100e;
   font-weight: 800;
 }
 
 .addheader {
-  border-top: 0.2rem solid hotpink;
+  border-top: 0.2rem solid #d39ca2;
   padding: 10px;
 }
 
 .loginheader {
-  border-top: 0.2rem solid hotpink;
+  border-top: 0.2rem solid #d39ca2;
   padding: 10px;
 }
 
 .showlist {
-  border-top: 0.2rem solid hotpink;
+  border-top: 0.2rem solid #d39ca2;
   padding: -15px;
   line-height: 0.5;
 }
