@@ -17,7 +17,7 @@ import { initUsers } from './reducers/userbaseReducer'
 import { login } from './reducers/userReducer'
 import Blog from './components/Blog'
 import Menubar from './components/Menubar'
-import { Container } from 'semantic-ui-react'
+import { Container, Header } from 'semantic-ui-react'
 
 const App = (props) => {
     const noteFormRef = React.createRef()
@@ -44,10 +44,15 @@ const App = (props) => {
     return (
         <Container>
             <Router>
-                <h1>Blogz</h1>
                 <div className="overlay"><Notification /></div>
                 <Menubar />
-                <Route exact path='/' render={() => <Login/> } />
+                <Container text>
+                    <Header
+                        as='h1'
+                        content='BLOGZ'
+                    />
+                </Container>
+                <Route exact path='/login' render={() => <Login/> } />
                 <Route exact path='/' render={() => <Togglable buttonLabel='Add blog' ref={ noteFormRef }>
                     <Route exact path='/' render={() => <AddBlog /> } />
                 </Togglable>} />

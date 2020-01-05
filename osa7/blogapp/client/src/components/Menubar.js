@@ -4,7 +4,7 @@ import blogService from '../services/blogs'
 import { login, logout } from '../reducers/userReducer'
 import { notification } from '../reducers/notificationReducer'
 import { Link } from 'react-router-dom'
-import { Menu, Container, Button } from 'semantic-ui-react'
+import { Menu, Container } from 'semantic-ui-react'
 
 
 const Menubar = (props) => {
