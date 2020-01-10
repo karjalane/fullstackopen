@@ -11,16 +11,14 @@ import Notification from './components/Notification'
 import Login from './components/Login'
 import Userbase from './components/Userbase'
 import User from './components/User'
-import Togglable from './components/Togglable'
 import { initBlogs } from './reducers/blogReducer'
 import { initUsers } from './reducers/userbaseReducer'
 import { login } from './reducers/userReducer'
 import Blog from './components/Blog'
 import Menubar from './components/Menubar'
-import { Container, Header } from 'semantic-ui-react'
+import { Container, Header, Segment } from 'semantic-ui-react'
 
 const App = (props) => {
-    const noteFormRef = React.createRef()
 
     useEffect(() => {
         const loggedUserJSON = window.localStorage.getItem('loggedBlogUser')
@@ -46,16 +44,14 @@ const App = (props) => {
             <Router>
                 <div className="overlay"><Notification /></div>
                 <Menubar />
-                <Container text>
+                <Segment inverted>
                     <Header
                         as='h1'
                         content='BLOGZ'
                     />
-                </Container>
+                </Segment>
                 <Route exact path='/login' render={() => <Login/> } />
-                <Route exact path='/' render={() => <Togglable buttonLabel='Add blog' ref={ noteFormRef }>
-                    <Route exact path='/' render={() => <AddBlog /> } />
-                </Togglable>} />
+                <Route exact path='/' render={() => <AddBlog /> } />
                 <Route exact path='/' render={() => <ShowBlogs /> } />
                 <Route exact path='/users' render={() => <Userbase /> } />
                 <Route exact path='/users/:id' render={({ match }) =>

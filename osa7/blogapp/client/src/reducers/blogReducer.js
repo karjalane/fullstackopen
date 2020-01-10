@@ -1,4 +1,6 @@
+/* eslint-disable no-case-declarations */
 import blogService from '../services/blogs'
+import commentService from '../services/comments'
 
 const byVotes = (b1, b2) => b2.likes - b1.likes
 
@@ -15,6 +17,12 @@ const reducer = (state = [], action) => {
             return newState
                 .map(b => b.id !== action.data.id ? b : action.data)
                 .sort(byVotes)
+        case 'COMMENT':
+            const blogId = action.data.blog
+            const blogToUpdate = newState.find(b => b.id === blogId)
+            console.log(blogToUpdate)
+            blogToUpdate.comments.push(({ content: action.data.content, id: action.data.id }))
+            return newState.map(b => b.id === blogToUpdate.id ? blogToUpdate : b)
         default:
             return newState
     }
@@ -66,6 +74,16 @@ export const voteBlog = blog => {
         dispatch({
             type: 'LIKE_BLOG',
             data
+        })
+    }
+}
+
+export const comment = (content, id) => {
+    return async dispatch => {
+        const comment = await commentService.create(content, id)
+        dispatch({
+            type: 'COMMENT',
+            data: comment
         })
     }
 }

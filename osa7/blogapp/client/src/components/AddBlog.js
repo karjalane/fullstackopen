@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { createBlog } from '../reducers/blogReducer'
 import { notification } from '../reducers/notificationReducer'
-//import { useField } from '../hooks'
+import { Form, Input, Button, Icon, Container, Segment } from 'semantic-ui-react'
 
 const AddBlog = (props) => {
     /*const title = useField('text')
@@ -29,29 +29,47 @@ const AddBlog = (props) => {
 
     return (
         <div>
-            <h2 className="addheader">Add new blog</h2>
-            <form onSubmit={ create }>
-                <div>
-                    Title:
-                    <input name='title'/>
-                </div>
-                <div>
-                    Author:
-                    <input name='author'/>
-                </div>
-                <div>
-                    URL:
-                    <input name='url'/>
-                </div>
-                <div>
-                    <button>Add</button>
-                </div>
-            </form>
+            <Container>
+                <Segment>
+                    <Form onSubmit={ create }>
+                        <h4 className="addheader">Add new blog</h4>
+                        <Form.Field>
+                            <label>Title:</label>
+                            <Input type='text' name='title'/>
+                        </Form.Field>
+                        <Form.Field>
+                            <label>Author:</label>
+                            <Input type='text' name='author'/>
+                        </Form.Field>
+                        <Form.Field>
+                            <label>URL:</label>
+                            <Input label='http://' type='text' name='url'/>
+                        </Form.Field>
+                        <Button
+                            disabled={ props.user ? false : true }
+                            color='green'>
+                            <Icon name='add' />
+                                Add
+                        </Button>
+                    </Form>
+                </Segment>
+            </Container>
         </div>
     )
 }
 
-export default connect(null, {
+const mapStateToProps = (state) => {
+    return {
+        user: state.user
+    }
+}
+
+const mapDispatchToProps = {
     createBlog
     , notification
-})(AddBlog)
+}
+
+export default connect(
+    mapStateToProps
+    , mapDispatchToProps
+)(AddBlog)

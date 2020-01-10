@@ -5,12 +5,13 @@ import { Link } from 'react-router-dom'
 const User = ({ user }) => {
 
     return user === undefined
-        ? null
+        ? <div>User not found</div>
         : <div>
             <Table celled striped>
                 <Table.Header>
                     <Table.Row>
                         <Table.HeaderCell>{ user.username }</Table.HeaderCell>
+                        <Table.Cell>has added { user.blogs.length } blogs</Table.Cell>
                     </Table.Row>
                 </Table.Header>
                 <Table.Body>

@@ -1,42 +1,35 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import Blog from './Blog'
-import { voteBlog, deleteBlog } from '../reducers/blogReducer'
-import { notification } from '../reducers/notificationReducer'
+import { Link } from 'react-router-dom'
+import { Table, Container, Divider, Icon } from 'semantic-ui-react'
 
-// Render blogs to UI
+// Render bloglist to UI
 const ShowBlogs = (props) => {
 
-    const handleLike = (blog) => {
-        props.voteBlog(blog)
-        props.notification(`You liked '${ blog.title }'`, false, 3)
-    }
-
-    const handleRemove = (blog) => {
-        if (window.confirm(`Confirm to delete: ${ blog.title }`)) {
-            props.deleteBlog(blog)
-            props.notification(`'${ blog.title }' deleted`, false, 3)
-        }
-    }
-
     return (
-        <div className="showlist">
-            { props.visibleBlogs
-                .sort((a,b) => b.likes - a.likes)
-                .map(blog =>
-                    <div key={ blog.id }>
-                        <br />
-                        <Blog
-                            blog={ blog }
-                            handleClick={() =>
-                                handleLike(blog)}
-                            handleRemove={() =>
-                                handleRemove(blog)}
-                        />
-                    </div>
-                )
-            }
-        </div>
+        <Container>
+            <Divider>
+                <Table>
+                    <Table.Body>
+                        { props.visibleBlogs
+                            .sort((a,b) => b.likes - a.likes)
+                            .map(blog =>
+                                <React.Fragment key={ blog.id }>
+                                    <Table.Row>
+                                        <Table.Cell verticalAlign='top'>
+                                            <Link to={ `/blogs/${ blog.id }` }>
+                                                { blog.title }
+                                            </Link>
+                                        </Table.Cell>
+                                        <Table.Cell verticalAlign='bottom'><Icon name='heart' color='red' />{ blog.likes }</Table.Cell>
+                                    </Table.Row>
+                                </React.Fragment>
+                            )
+                        }
+                    </Table.Body>
+                </Table>
+            </Divider>
+        </Container>
     )
 }
 
@@ -46,13 +39,6 @@ const mapStateToProps = (state) => {
     }
 }
 
-const mapDispatchToProps = {
-    voteBlog,
-    deleteBlog,
-    notification
-}
-
 export default connect(
     mapStateToProps
-    , mapDispatchToProps
 )(ShowBlogs)
