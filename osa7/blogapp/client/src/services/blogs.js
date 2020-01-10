@@ -13,8 +13,6 @@ const getAll = async () => {
 }
 
 const create = async (content) => {
-    console.log(content)
-    console.log(token)
     const config = {
         headers: { Authorization: token }
     }
@@ -25,6 +23,7 @@ const create = async (content) => {
 }
 
 const update = async (content) => {
+    console.log('service', content)
     const config = {
         headers: { Authorization: token }
     }

@@ -6,7 +6,7 @@ const jwt = require('jsonwebtoken')
 blogsRouter.get('/', async (req, res) => {
     const blogs = await Blog
         .find({})
-        .populate('user', { username: 1, name: 1 })
+        .populate('user', { username: 1, name: 1, id: 1 })
         .populate('comments', { content: 1 })
     res.json(blogs.map(blog => blog.toJSON()))
 })
@@ -44,7 +44,6 @@ blogsRouter.post('/', async (req, res, next) => {
             url: body.url,
             likes: body.likes === undefined ? 0 : body.likes,
             user: user._id,
-            comments: body.comments
         })
 
         const savedBlog = await blog.save()
@@ -78,16 +77,18 @@ blogsRouter.delete('/:id', async (req, res, next) => {
 
 blogsRouter.put('/:id', async (req, res, next) => {
     const body = req.body
+    console.log(body)
     const blog = {
         title: body.title,
         author: body.author,
         url: body.url,
         likes: body.likes === undefined ? 0 : body.likes,
-        comments: body.comments === undefined ? 0 : body.comments
     }
     try {
         const updtBlog = await Blog
             .findByIdAndUpdate(req.params.id, blog, { new: true })
+            .populate('user', { username: 1, name: 1, id: 1 })
+            .populate('comments', { content: 1 })
         res.json(updtBlog.toJSON())
     } catch (exception) {
         next(exception)

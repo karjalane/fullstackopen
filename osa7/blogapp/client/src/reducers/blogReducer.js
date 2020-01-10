@@ -20,7 +20,6 @@ const reducer = (state = [], action) => {
         case 'COMMENT':
             const blogId = action.data.blog
             const blogToUpdate = newState.find(b => b.id === blogId)
-            console.log(blogToUpdate)
             blogToUpdate.comments.push(({ content: action.data.content, id: action.data.id }))
             return newState.map(b => b.id === blogToUpdate.id ? blogToUpdate : b)
         default:

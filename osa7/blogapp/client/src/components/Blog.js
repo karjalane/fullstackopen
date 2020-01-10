@@ -11,6 +11,7 @@ const Blog = (props) => {
     }
 
     const { title, author, url, likes, user, comments } = props.blog
+    console.log('Blog', comments)
 
     const handleLike = () => {
         props.voteBlog(props.blog)
