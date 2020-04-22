@@ -23,7 +23,6 @@ const App = () => {
       <NewBook
         show={ page === 'add' }
       />
-
     </div>
   )
 }
